@@ -8,6 +8,7 @@ https://canvas.uts.edu.au/courses/27375/files/4478549?wrap=1
 Errors encountered
 terminate called after throwing an instance of 'LibSerial::OpenFailed'
   what():  Permission denied
+
 Fix: 
 run "gedit ~./bashrc" in terminal
 Move "source ~/catkin_ws/devel/setup.bash" to bottom (Line may be written differently for each user)
