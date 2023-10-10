@@ -2,6 +2,7 @@
 Sensors and Control for Mechatronic Systems | Project 3 Group 11 - DoBot Pick and Place 
 
 DoBot Set-up Links
+
 https://github.com/gapaul/dobot_magician_driver/wiki/Instructions-For-Native-Linux
 
 https://canvas.uts.edu.au/courses/27375/files/4478549?wrap=1
