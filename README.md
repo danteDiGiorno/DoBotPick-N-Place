@@ -28,3 +28,4 @@ Python Error on MATLAB
 Fix:
 
 Go to preferences > ROS Toolbox > Open ROS Toolbox Preferences > copy and past python 3.8 install line into terminal
+.
