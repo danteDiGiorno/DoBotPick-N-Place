@@ -12,6 +12,18 @@ https://github.com/gapaul/dobot_magician_driver/wiki/MATLAB-Example
 https://github.com/CharlieeT/Dobot-D435i-PickObjects
 
 Errors encountered
+
+Error after running "roslaunch dobot_magician_driver dobot_magician.launch"
+RLException: [dobot_magician.launch] is neither a launch file in package [dobot_magician_driver] nor is [dobot_magician_driver] a launch file name
+The traceback for the exception was written to the log file
+
+Fix: 
+cd catkin_ws/
+source devel/setup.bash 
+and make sure roscore is running
+roslaunch dobot_magician_driver dobot_magician.launch
+
+
   terminate called after throwing an instance of 'LibSerial::OpenFailed'
     what():  Permission denied
   
