@@ -13,6 +13,10 @@ https://github.com/CharlieeT/Dobot-D435i-PickObjects
 
 Errors encountered
 
+Error when running
+sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+roslaunch realsense2_camera rs_camera.launch align_depth:=true filters:=pointcloud ordered_pc:=true
+
 Error after running "roslaunch dobot_magician_driver dobot_magician.launch"
 RLException: [dobot_magician.launch] is neither a launch file in package [dobot_magician_driver] nor is [dobot_magician_driver] a launch file name
 The traceback for the exception was written to the log file
