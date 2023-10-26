@@ -4,12 +4,34 @@
 % Ahmad Syahmi Mohd Nasir - 14034882
 
 % Look into readme.md for startup and errors
+
+%%
+clc;
+clear;
+close all;
 %% Start ROS and Dobot
 
 rosshutdown;
 rosinit;
 
-DoBotControl.MoveXYZ(0.1776,0,0.07,0,0,pi/8);
+%%
+endEffectorPosition = [0.2,0,0.15];
+endEffectorRotation = [0,0,0];
+
+[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose');
+
+targetEndEffectorMsg.Position.X = endEffectorPosition(1);
+targetEndEffectorMsg.Position.Y = endEffectorPosition(2);
+targetEndEffectorMsg.Position.Z = endEffectorPosition(3);
+
+qua = eul2quat(endEffectorRotation);
+targetEndEffectorMsg.Orientation.W = qua(1);
+targetEndEffectorMsg.Orientation.X = qua(2);
+targetEndEffectorMsg.Orientation.Y = qua(3);
+targetEndEffectorMsg.Orientation.Z = qua(4);
+
+send(targetEndEffectorPub,targetEndEffectorMsg);
+
 %% Start the IntelRealSense RGBD Camera
 
 % Sub to the ideal ros topic from the camera
@@ -37,8 +59,6 @@ blue = pcobj.Color(:,3,:);
 
 % Filter the pointcloud by the colour of the blocks
 resultRed   =  find(red > 180 & red < 225  & green > 60 & green < 120 & blue > 94 & blue < 120);
-resultGreen =  find(red > 90   & red < 120    & green > 176 & green < 210 & blue > 178 & blue < 210);
-resultBlue  =  find(red > 1 & red < 40 & green > 135 & green < 145 & blue > 200 & blue < 255);
 
 
 drawnow();
@@ -54,35 +74,51 @@ redRGBVal = [pcobj.Color(IndexR,1,:), pcobj.Color(IndexR,2,:), pcobj.Color(Index
 
 if length(redBlockPose) == 0  || all(redBlockPose) == 0      % If the pose is empty
 disp("Red not found");
-  r = 1;
+  return;
 end  
 
-
-% Green -------------------------------------------------------------------------------------
-IndexG = min((resultGreen))+50;         % Find the minimum of the green point but plus 50 index to get to the middle
-greenBlockPose = [cloud(IndexG,1,:), cloud(IndexG,2,:), cloud(IndexG,3,:)];
-greenRGBVal = [pcobj.Color(IndexG,1,:), pcobj.Color(IndexG,2,:), pcobj.Color(IndexG,3,:)];
-
-if length(greenBlockPose) == 0 || all(greenBlockPose) == 0    % If the pose is empty
-disp("Green not found");
-  g = 1;
-end  
-
-
-% Blue  -------------------------------------------------------------------------------------
-IndexB = min((resultBlue))+50;         % Find the minimum of the blue point but plus 50 index to get to the middle
-blueBlockPose = [cloud(IndexB,1,:), cloud(IndexB,2,:), cloud(IndexB,3,:)];
-blueRGBVal = [pcobj.Color(IndexB,1,:), pcobj.Color(IndexB,2,:), pcobj.Color(IndexB,3,:)];
-
-if length(blueBlockPose) == 0 || all(blueBlockPose) == 0     % If the pose is empty
-disp("Blue not found");
-  b = 1;
-end  
 
 %% Convert Camera pose to Dobot Coordinate frame
 
 blockHeight = -0.0309929275512695;  %based on coordinate frame of Dobot
-redBlockPoseDobot = [ 0.3118 , -0.0112 , blockHeight];
+redBlockPos = [((redBlockPose(2)*-1)+endEffectorPosition(1)+0.03),  (redBlockPose(1)*-1)+0.1 , blockHeight]; %x = distance from 0,0 to camera
 
-DoBotControl.MoveXYZ(redBlockPoseDobot(1),redBlockPoseDobot(2),redBlockPoseDobot(3),0,0,pi/8);
-pause(1);
+%% Move end effector to location
+endEffectorPosition = [redBlockPos];
+endEffectorRotation = [0,0,0];
+
+[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose');
+
+targetEndEffectorMsg.Position.X = endEffectorPosition(1);
+targetEndEffectorMsg.Position.Y = endEffectorPosition(2);
+targetEndEffectorMsg.Position.Z = endEffectorPosition(3);
+
+qua = eul2quat(endEffectorRotation);
+targetEndEffectorMsg.Orientation.W = qua(1);
+targetEndEffectorMsg.Orientation.X = qua(2);
+targetEndEffectorMsg.Orientation.Y = qua(3);
+targetEndEffectorMsg.Orientation.Z = qua(4);
+
+send(targetEndEffectorPub,targetEndEffectorMsg);
+
+
+pause(5);
+
+
+%% move to another location
+endEffectorPosition = [0.2,0,0.1];
+endEffectorRotation = [0,0,0];
+
+[targetEndEffectorPub,targetEndEffectorMsg] = rospublisher('/dobot_magician/target_end_effector_pose');
+
+targetEndEffectorMsg.Position.X = endEffectorPosition(1);
+targetEndEffectorMsg.Position.Y = endEffectorPosition(2);
+targetEndEffectorMsg.Position.Z = endEffectorPosition(3);
+
+qua = eul2quat(endEffectorRotation);
+targetEndEffectorMsg.Orientation.W = qua(1);
+targetEndEffectorMsg.Orientation.X = qua(2);
+targetEndEffectorMsg.Orientation.Y = qua(3);
+targetEndEffectorMsg.Orientation.Z = qua(4);
+
+send(targetEndEffectorPub,targetEndEffectorMsg);
