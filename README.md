@@ -9,8 +9,6 @@ https://canvas.uts.edu.au/courses/27375/files/4478549?wrap=1
 
 https://github.com/gapaul/dobot_magician_driver/wiki/MATLAB-Example
 
-https://github.com/CharlieeT/Dobot-D435i-PickObjects
-
 Errors encountered
 
 Error when running
