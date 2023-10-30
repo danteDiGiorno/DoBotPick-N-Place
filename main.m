@@ -32,50 +32,49 @@ targetEndEffectorMsg.Orientation.Z = qua(4);
 
 send(targetEndEffectorPub,targetEndEffectorMsg);
 
-%% Start the IntelRealSense RGBD Camera
-
-% Sub to the ideal ros topic from the camera
+% Initialize the ROS subscribers for RGBD camera data
 rgbSub = rossubscriber('/camera/aligned_depth_to_color/image_raw');
-pointsSub = rossubscriber('/camera/depth/color/points'); %('/camera/depth/points');
-pause(5); 
+pointsSub = rossubscriber('/camera/depth/color/points');
+pause(5);
 
-% Get the first message and plot the pointcloud data as 3D scatter plot
-pointMsg = pointsSub.LatestMessage;                
-pointMsg.PreserveStructureOnRead = false;  
-cloudPlot_h = scatter3(pointMsg,'Parent',gca);
+% Get the latest point cloud message and create a 3D scatter plot
+pointMsg = pointsSub.LatestMessage;
+pointMsg.PreserveStructureOnRead = false;
+figure; % Create a new figure for the point cloud plot
+cloudPlot_h = scatter3(pointMsg);
 
-% The view of the camera, limited up to dobot and the workspace
+% Set the limits for the camera view
 xlim([-0.3 0.3]);
 ylim([-0.1 0.2]);
 zlim([0 0.5]);
 
-pcobj = pointCloud(readXYZ(pointMsg),'Color',uint8(255*readRGB(pointMsg)));
+% Create a point cloud object
+pcobj = pointCloud(readXYZ(pointMsg), 'Color', uint8(255 * readRGB(pointMsg)));
 
-% Select the RGB data from the pointcloud
-rgb = pcobj.Color(:,:,:);
-red = pcobj.Color(:,1,:);
-green = pcobj.Color(:,2,:);
-blue = pcobj.Color(:,3,:);
+% Extract RGB data from the point cloud
+rgb = pcobj.Color;
 
-% Filter the pointcloud by the colour of the blocks
-resultRed   =  find(red > 180 & red < 225  & green > 60 & green < 120 & blue > 94 & blue < 120);
+% Define color range for red objects
+redRange = (rgb(:, 1) > 180 & rgb(:, 1) < 225) & ...
+           (rgb(:, 2) > 60 & rgb(:, 2) < 120) & ...
+           (rgb(:, 3) > 94 & rgb(:, 3) < 120);
 
+% Find indices of red objects in the point cloud
+redIndices = find(redRange);
 
-drawnow();
-
-cloud = readXYZ(pointMsg);
-r = 0; g = 0; b = 0;          % Use to flag if the colour blocks are found
-
-
-% Red ---------------------------------------------------------------------------------------
-IndexR = min((resultRed))+50;           % Find the minimum of the red point but plus 50 index to get to the middle
-redBlockPose = [cloud(IndexR,1,:), cloud(IndexR,2,:), cloud(IndexR,3,:)];
-redRGBVal = [pcobj.Color(IndexR,1,:), pcobj.Color(IndexR,2,:), pcobj.Color(IndexR,3,:)];
-
-if length(redBlockPose) == 0  || all(redBlockPose) == 0      % If the pose is empty
-disp("Red not found");
-  return;
-end  
+% Check if red objects are found
+if isempty(redIndices)
+    disp("Red objects not found");
+    return;
+else
+    % Calculate the position and color of the first red object
+    redIndex = min(redIndices) + 50;
+    redBlockPose = pcobj.Location(redIndex, :);
+    redRGBVal = pcobj.Color(redIndex, :);
+    disp("Red object found:");
+    disp("Position: " + mat2str(redBlockPose));
+    disp("Color (RGB): " + mat2str(redRGBVal));
+end
 
 
 %% Convert Camera pose to Dobot Coordinate frame
