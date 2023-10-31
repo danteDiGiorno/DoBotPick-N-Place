@@ -4,6 +4,7 @@
 
 % Ahmad Syahmi Mohd Nasir - 14034882
 % Petra Schulzer - 13882129 [feature extraction]
+% Anton Cecire - 13936529 [Movement and End Effector Control]
 
 %%
 clc;
