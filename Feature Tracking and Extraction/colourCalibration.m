@@ -1,3 +1,9 @@
+% Petra Schulzer 13882129 
+% Made for manual calibration 
+% Code lets you pick three points (to get average) on an image and gives you colour values
+
+%==============================================
+
 % Load the image
 image = imread('colourcalib.jpg'); 
 
