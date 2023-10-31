@@ -1,3 +1,8 @@
+% Petra Schulzer 13882129 
+% Made for demonstration in presentation video
+
+%==============================================
+
 % Load the image
 image = imread('testcolour_Color (1).png');
 
