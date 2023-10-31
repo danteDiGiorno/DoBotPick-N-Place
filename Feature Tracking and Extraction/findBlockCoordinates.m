@@ -1,3 +1,10 @@
+% Petra Schulzer 13882129 
+% Made for automatic calibration 
+% Code is integrated with ROS and RealSense camera 
+% It lets you pick one point on an image and works out object colour, finds that colour in the point cloud and extracts location coordinates
+
+%==============================================
+
 %% ========================= Cleaning Workspace ========================
 clear all;
 close all;
@@ -80,7 +87,7 @@ if ~isempty(colourIndices)
     disp("Position: " + mat2str(blockPosition));
     disp("Colour: " + mat2str(RGBVal));
 
-    % Convert Camera pose to Dobot Coordinate frame
+    % Show coordinates
     blockHeight = -0.0267;  
     blockCoordinates = [((blockPosition(2)*-1) + endEffectorPosition(1) + 0.03),  (blockPosition(1)*-1) + 0.1, blockHeight];
     disp("Block Coordinates in Dobot Frame:");
