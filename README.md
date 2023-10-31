@@ -4,9 +4,9 @@ Sensors and Control for Mechatronic Systems | Project 3 Group 11 - DoBot Pick an
 =========================================================================================
 
 Contributions: 
-    Petra Schulzer - 13882129 --> 33%
-    Anton Cecire - 13936529 --> 33%
-    Ahmad Syahmi Mohd Nasir - 14034882 --> 33%
+- Petra Schulzer - 13882129 --> 33%
+- Anton Cecire - 13936529 --> 33%
+- Ahmad Syahmi Mohd Nasir - 14034882 --> 33%
 
 =========================================================================================
 
